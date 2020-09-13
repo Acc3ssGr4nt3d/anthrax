@@ -144,6 +144,18 @@ int exec(char* argv[], char* env[]) {
 	return 0;
 }
 
+int exec2(char* argv[], char* env[]) {
+	pid_t processId;
+    if ((processId = fork()) == 0) {
+        if (execve(argv[0], argv, env) < 0) {
+            puts("execv error");
+        }
+    } else if (processId < 0) {
+        puts("fork error");
+    } 
+	return 0;
+}
+
 int _strlen(const char* s) {
 	int i = 0;
 	for(i = 0; i >= 0; i++) {

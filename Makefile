@@ -21,6 +21,7 @@ CP = cp
 SYNC = sync
 HDIUTIL = hdiutil
 XPWNTOOL = /usr/local/bin/xpwntool
+IMAGE3MAKER = image3maker
 
 LAUNCHD_TARGET = src/launchd
 RAMDISK_TARGET = ramdisk.dmg
@@ -54,11 +55,12 @@ src/launchd:
 
 ramdisk.dmg: src/launchd
 	$(CP) template.dmg ramdisk.dmg
+	hdiutil attach ramdisk.dmg
 	hfsplus ramdisk.dmg add src/launchd /sbin/launchd
 	hfsplus ramdisk.dmg addall files/ /files
 	$(CP) src/launchd $(RAMDISK_VOLUME)/sbin/
 	$(CP) -R files/* $(RAMDISK_VOLUME)/files/
+	hdiutil detach $(RAMDISK_VOLUME)
 
 ramdisk.img3: ramdisk.dmg
-	$(XPWNTOOL) ramdisk.dmg ramdisk.dmg -k $(RAMDISK_KEY) -iv $(RAMDISK_IV) -t $(RAMDISK_TEMPLATE)
-	$(XPWNTOOL) ramdisk.dmg ramdisk.img3 -k $(RAMDISK_KEY) -iv $(RAMDISK_IV) -decrypt
+	@$(IMAGE3MAKER) -t rdsk -f ramdisk.dmg -o deca5jb.img3

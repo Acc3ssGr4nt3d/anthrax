@@ -16,11 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ###
  
-SDKVER = 4.0
+SDKVER = 7.1
 PLATFORM = /Developer/Platforms/iPhoneOS.platform
-SDK = $(PLATFORM)/Developer/SDKs/iPhoneOS$(SDKVER).sdk
-CC = $(PLATFORM)/Developer/usr/bin/gcc-4.2
-STRIP = $(PLATFORM)/Developer/usr/bin/strip
+SYSROOT = ~/Downloads/iPhoneOS7.1.sdk
+CC = `xcrun -find cc`
+STRIP = `xcrun -find strip`
 LDID = /usr/local/bin/ldid
 
 TARGETS = $(LAUNCHD_TARGET)
@@ -28,8 +28,8 @@ TARGETS = $(LAUNCHD_TARGET)
 # Setupp objects for launchd
 LAUNCHD_TARGET = launchd
 LAUNCHD_OBJECTS = launchd.o utils.o syscalls.o
-LAUNCHD_CFLAGS = -arch armv6 -isysroot=$(SDK) -I$(SDK)/usr/include -static -nostartfiles -nodefaultlibs -nostdlib -Wl,-e,_main
-LAUNCHD_LDFLAGS = 
+LAUNCHD_CFLAGS = -I. -arch armv6 -static -nodefaultlibs -nostdlib -isysroot$(SYSROOT) -I$(SYSROOT) -fno-stack-protector
+LAUNCHD_LDFLAGS = -arch armv6 -Wl,-e,_main -Wl,-no_pie -nostartfiles
 
 PWD = $(shell pwd)
 
