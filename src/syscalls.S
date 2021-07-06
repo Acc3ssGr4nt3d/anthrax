@@ -40,6 +40,7 @@
 .globl _kill
 .globl _dup
 .globl _symlink
+.globl _readlink
 
 .globl _chroot
 .globl _vfork
@@ -54,7 +55,8 @@
 .globl _access
 .globl _wait4
 .globl _execve
-
+.globl _getdirentries
+.global _fstat
 
 /* void exit(int status) */
 _exit:
@@ -194,6 +196,12 @@ _symlink:
     swi    #0x80
     bx     lr
     
+/* ssize_t readlink(const char *restrict path, char *restrict buf, size_t bufsize) */
+_readlink:
+    mov    r12, #0x3A
+    swi    #0x80
+    bx     lr
+
 /* int chroot(const char *path) */
 _chroot:
     mov    r12, #0x3D
@@ -232,5 +240,17 @@ _wait4:
 /* int execve(const char *path, char *const argv[], char *const envp[]) */
 _execve:
     mov    r12, #0x3B
+    swi    #0x80
+    bx     lr
+
+/* int getdirentries(int, char *, int, long *) */
+_getdirentries:
+    mov    r12, #0xC4
+    swi    #0x80
+    bx     lr
+
+/* int fstat(int fd, struct stat *buf) */
+_fstat:
+    mov    r12, #0xBD
     swi    #0x80
     bx     lr

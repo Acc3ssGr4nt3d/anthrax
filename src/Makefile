@@ -17,8 +17,8 @@
 ###
  
 SDKVER = 7.1
-PLATFORM = /Developer/Platforms/iPhoneOS.platform
-SYSROOT = ~/Downloads/iPhoneOS7.1.sdk
+PLATFORM = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform
+SYSROOT = /Users/spiral/Downloads/iPhoneOS7.1.sdk
 CC = `xcrun -find cc`
 STRIP = `xcrun -find strip`
 LDID = /usr/local/bin/ldid
@@ -28,7 +28,7 @@ TARGETS = $(LAUNCHD_TARGET)
 # Setupp objects for launchd
 LAUNCHD_TARGET = launchd
 LAUNCHD_OBJECTS = launchd.o utils.o syscalls.o
-LAUNCHD_CFLAGS = -I. -arch armv6 -static -nodefaultlibs -nostdlib -isysroot$(SYSROOT) -I$(SYSROOT) -fno-stack-protector
+LAUNCHD_CFLAGS = -I. -arch armv6 -static -nodefaultlibs -nostdlib -isysroot$(SYSROOT) -I$(SYSROOT) -fno-stack-protector -D__DARWIN_64_BIT_INO_T=0
 LAUNCHD_LDFLAGS = -arch armv6 -Wl,-e,_main -Wl,-no_pie -nostartfiles
 
 PWD = $(shell pwd)

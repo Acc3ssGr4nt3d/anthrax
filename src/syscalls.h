@@ -42,6 +42,8 @@ int write(int fd, const void *buf, unsigned int count);
 int open(const char* pathname, int flags, ...);
 int close(int fd);
 int unlink(const char* pathname);
+int symlink(const char *oldpath, const char *newpath);
+int readlink(const char *path, char *buf, int bufsize);
 int dup2(int oldfd, int newfd);
 int stat(const char* path, struct stat* buf);
 int reboot(int howto);
@@ -57,5 +59,7 @@ int wait4(pid_t pid, int *stat_loc, int options, struct rusage *rusage);
 int execve(const char *path, char *const argv[], char *const envp[]);
 int chroot(const char *dirname);
 int vfork(void);
+//int getdirentries(int fd, char  *buf, size_t nbytes, off_t *basep);
+int fstat(int fd, struct stat *buf);
 
 #endif
