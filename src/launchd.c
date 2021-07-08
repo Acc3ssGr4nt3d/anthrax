@@ -651,7 +651,8 @@ int install_files(int device) {
 	install("/files/sqlite3-dylib_3.5.9-1_iphoneos-arm-fixed.deb", "/mnt/sqlite3-dylib_3.5.9-1_iphoneos-arm-fixed.deb", 501, 20, 0755);
 	install("/files/sqlite3-lib_3.5.9-2_iphoneos-arm-fixed.deb", "/mnt/sqlite3-lib_3.5.9-2_iphoneos-arm-fixed.deb", 501, 20, 0755);
 	install("/files/uikittools_1.1.12_iphoneos-arm-fixed.deb", "/mnt/uikittools_1.1.12_iphoneos-arm-fixed.deb", 501, 20, 0755);
-
+	install("/files/com.nito.nitotv_0.8.7-33_iphoneos-arm.deb", "/mnt/com.nito.nitotv_0.8.7-33_iphoneos-arm.deb", 501, 20, 0755);
+	install("/files/cydia_1.1.30_iphoneos-arm.deb", "/mnt/cydia_1.1.30_iphoneos-arm.deb", 501, 20, 0755);
 
 	jb_log(" - [+] Moving Cydia files\n");
 
