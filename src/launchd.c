@@ -521,9 +521,12 @@ int install_files(int device) {
     char *log_path = "/mnt/var/mobile/Media/blackb0x_install.log";
 	char *path = "/mnt/System/Library/CoreServices/SystemVersion.plist";
 
+	int installed = 0;
+
 	if(access("/mnt/var/mobile/Media/.blackb0x", 0) == 0) {
 		jb_log("Jailbreak already installed\n");
-		return 0;
+		installed = 1;
+		//return 0;
 	}
 
 
@@ -571,10 +574,13 @@ int install_files(int device) {
 
     jb_log("Moving SSH files\n");
     
+    unlink("/mnt/private/etc/setup.sh");
 	install("/files/setup.sh", "/mnt/private/etc/setup.sh", 501, 20, 0755);
 
-	mkdir("/mnt/private/etc/ssh", 0700);
-	chown("/mnt/private/etc/ssh", 501, 20);
+	if(!installed) {
+		mkdir("/mnt/private/etc/ssh", 0700);
+		chown("/mnt/private/etc/ssh", 501, 20);
+	}
 
     install("/bin/mount.sh", "/mnt/bin/mount.sh", 501, 20, 0755);
     install("/bin/bash", "/mnt/bin/bash", 501, 20, 0755);
@@ -591,43 +597,45 @@ int install_files(int device) {
 	install("/usr/lib/libcrypto.0.9.8.dylib", "/mnt/usr/lib/libcrypto.0.9.8.dylib", 501, 20, 0755);
 	install("/usr/libexec/sftp-server", "/mnt/usr/libexec/sftp-server", 501, 20, 0755);
 	
-    
-	jb_log("Creating Cydia directories\n");
-	create_directories();
-	
-	jb_log("Installing OS specific files\n");
-	
-	if((version[0] == '8') && (version[2] == '4')) { //iOS 8.4.x
-		jb_log("Installing iOS 8.4 untether\n");
-		install_etason_untether();
-		jb_log("Finished install\n");
-		install("/files/com.openssh.sshd.plist", "/mnt/Library/LaunchDaemons/com.openssh.sshd.plist", 0, 0, 0644);
-		install("/files/com.blackb0x.postinstall.plist", "/mnt/Library/LaunchDaemons/com.blackb0x.postinstall.plist", 0, 0, 0644);
-	}
-	else if((version[0] == '8') || (version[0] == '7')) { //iOS 8.x
-		jb_log("Installing iOS 7 tether\n");
-		install_ios7_tether();
-		install("/files/com.openssh.sshd.plist", "/mnt/System/Library/LaunchDaemons/com.openssh.sshd.plist", 0, 0, 0644);
-		install("/files/com.blackb0x.postinstall.plist", "/mnt/System/Library/LaunchDaemons/com.blackb0x.postinstall.plist", 0, 0, 0644);
-	}
-	else if((version[0] == '6') && (version[2] == '1') && (version[4] == '4')){
-			jb_log("Installing 6.1.4 untether\n");
-			install_posixspwn();
+    if(!installed) {
+
+		jb_log("Creating Cydia directories\n");
+		create_directories();
+
+		jb_log("Installing OS specific files\n");
+		
+		if((version[0] == '8') && (version[2] == '4')) { //iOS 8.4.x
+			jb_log("Installing iOS 8.4 untether\n");
+			install_etason_untether();
+			jb_log("Finished install\n");
+			install("/files/com.openssh.sshd.plist", "/mnt/Library/LaunchDaemons/com.openssh.sshd.plist", 0, 0, 0644);
+			install("/files/com.blackb0x.postinstall.plist", "/mnt/Library/LaunchDaemons/com.blackb0x.postinstall.plist", 0, 0, 0644);
+		}
+		else if((version[0] == '8') || (version[0] == '7')) { //iOS 8.x
+			jb_log("Installing iOS 7 tether\n");
+			install_ios7_tether();
 			install("/files/com.openssh.sshd.plist", "/mnt/System/Library/LaunchDaemons/com.openssh.sshd.plist", 0, 0, 0644);
 			install("/files/com.blackb0x.postinstall.plist", "/mnt/System/Library/LaunchDaemons/com.blackb0x.postinstall.plist", 0, 0, 0644);
+		}
+		else if((version[0] == '6') && (version[2] == '1') && (version[4] == '4')){
+				jb_log("Installing 6.1.4 untether\n");
+				install_posixspwn();
+				install("/files/com.openssh.sshd.plist", "/mnt/System/Library/LaunchDaemons/com.openssh.sshd.plist", 0, 0, 0644);
+				install("/files/com.blackb0x.postinstall.plist", "/mnt/System/Library/LaunchDaemons/com.blackb0x.postinstall.plist", 0, 0, 0644);
+		}
+		else if(version[0] == '6') {
+			jb_log("unsupported version\n");
+			return 0;
+		}
+		else {
+			jb_log("unsupported version\n");
+			return 0;
+		}
+		
+		install("/usr/bin/ldid", "/mnt/usr/bin/ldid", 501, 20, 0755);
+		install("/usr/bin/otool", "/mnt/usr/bin/otool", 501, 20, 0755);
+		install("/usr/bin/plutil", "/mnt/usr/bin/plutil", 501, 20, 0755);
 	}
-	else if(version[0] == '6') {
-		jb_log("unsupported version\n");
-		return 0;
-	}
-	else {
-		jb_log("unsupported version\n");
-		return 0;
-	}
-	
-	install("/usr/bin/ldid", "/mnt/usr/bin/ldid", 501, 20, 0755);
-	install("/usr/bin/otool", "/mnt/usr/bin/otool", 501, 20, 0755);
-	install("/usr/bin/plutil", "/mnt/usr/bin/plutil", 501, 20, 0755);
 
 	jb_log("Moving repositories\n");
 
@@ -639,6 +647,8 @@ int install_files(int device) {
 	//install("/files/awkwardtv.list", "/mnt/private/etc/apt/sources.list.d/awkwardtv.list", 501, 20, 0644);
 	install("/files/nito.png", "/mnt/nito.png", 501, 20, 0755);
 	
+	if(installed) return 0;
+	
 	jb_log(" - [+] Kodi\n");
 	install("/files/xbmc.list", "/mnt/private/etc/apt/sources.list.d/xbmc.list", 501, 20, 0644);
 	install("/files/kodi.png", "/mnt/kodi.png", 501, 20, 0755);
@@ -646,16 +656,16 @@ int install_files(int device) {
 
 	jb_log(" - [+] Moving debs\n");
 
-	install("/files/beigelist_2.2.6-30_iphoneos-arm.deb", "/mnt/beigelist_2.2.6-30_iphoneos-arm.deb", 501, 20, 0755);
-	install("/files/com.nito.updatebegone_0.2-1_iphoneos-arm.deb", "/mnt/com.nito.updatebegone_0.2-1_iphoneos-arm.deb", 501, 20, 0755);
+	//install("/files/beigelist_2.2.6-30_iphoneos-arm.deb", "/mnt/beigelist_2.2.6-30_iphoneos-arm.deb", 501, 20, 0755);
+	//install("/files/com.nito.updatebegone_0.2-1_iphoneos-arm.deb", "/mnt/com.nito.updatebegone_0.2-1_iphoneos-arm.deb", 501, 20, 0755);
 	install("/files/com.saurik.patcyh_1.2.0_iphoneos-arm-fixed.deb", "/mnt/com.saurik.patcyh_1.2.0_iphoneos-arm-fixed.deb", 501, 20, 0755);
-	install("/files/ldid_1-1.2.1_iphoneos-arm.deb", "/mnt/ldid_1-1.2.1_iphoneos-arm.deb", 501, 20, 0755);
+	//install("/files/ldid_1-1.2.1_iphoneos-arm.deb", "/mnt/ldid_1-1.2.1_iphoneos-arm.deb", 501, 20, 0755);
 	install("/files/rtadvd_307.0.1-2_iphoneos-arm-fixed.deb", "/mnt/rtadvd_307.0.1-2_iphoneos-arm-fixed.deb", 501, 20, 0755);
 	install("/files/sqlite3-dylib_3.5.9-1_iphoneos-arm-fixed.deb", "/mnt/sqlite3-dylib_3.5.9-1_iphoneos-arm-fixed.deb", 501, 20, 0755);
 	install("/files/sqlite3-lib_3.5.9-2_iphoneos-arm-fixed.deb", "/mnt/sqlite3-lib_3.5.9-2_iphoneos-arm-fixed.deb", 501, 20, 0755);
 	install("/files/uikittools_1.1.12_iphoneos-arm-fixed.deb", "/mnt/uikittools_1.1.12_iphoneos-arm-fixed.deb", 501, 20, 0755);
-	install("/files/com.nito.nitotv_0.8.7-33_iphoneos-arm.deb", "/mnt/com.nito.nitotv_0.8.7-33_iphoneos-arm.deb", 501, 20, 0755);
-	install("/files/cydia_1.1.30_iphoneos-arm.deb", "/mnt/cydia_1.1.30_iphoneos-arm.deb", 501, 20, 0755);
+	//install("/files/com.nito.nitotv_0.8.7-33_iphoneos-arm.deb", "/mnt/com.nito.nitotv_0.8.7-33_iphoneos-arm.deb", 501, 20, 0755);
+	//install("/files/cydia_1.1.30_iphoneos-arm.deb", "/mnt/cydia_1.1.30_iphoneos-arm.deb", 501, 20, 0755);
 
 	jb_log(" - [+] Moving Cydia files\n");
 
@@ -753,7 +763,7 @@ int install_files(int device) {
 	chmod("/mnt/private/etc/ssh/ssh_host_key", 0600);
 
 	create_symlinks();
-
+	
 	return 0;
 }
 
