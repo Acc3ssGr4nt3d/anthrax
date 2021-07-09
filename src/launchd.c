@@ -631,9 +631,12 @@ int install_files(int device) {
 
 	jb_log("Moving repositories\n");
 
-	jb_log(" - [+] AwkwardTV\n");
-	install("/files/awkwardtv.gpg", "/mnt/private/etc/apt/trusted.gpg.d/awkwardtv.gpg", 501, 20, 0755);
-	install("/files/awkwardtv.list", "/mnt/private/etc/apt/sources.list.d/awkwardtv.list", 501, 20, 0644);
+	jb_log(" - [+] JoshTV\n");
+
+	install("/files/joshtv.list", "/mnt/joshtv.list", 501, 20, 0644);
+	install("/files/pubkey.key", "/mnt/pubkey.key", 501, 20, 0755);
+	//install("/files/awkwardtv.gpg", "/mnt/private/etc/apt/trusted.gpg.d/awkwardtv.gpg", 501, 20, 0755);
+	//install("/files/awkwardtv.list", "/mnt/private/etc/apt/sources.list.d/awkwardtv.list", 501, 20, 0644);
 	install("/files/nito.png", "/mnt/nito.png", 501, 20, 0755);
 	
 	jb_log(" - [+] Kodi\n");
