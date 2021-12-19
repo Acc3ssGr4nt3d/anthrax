@@ -656,10 +656,10 @@ int install_files(int device) {
 
 	jb_log(" - [+] Moving debs\n");
 
-	//install("/files/beigelist_2.2.6-30_iphoneos-arm.deb", "/mnt/beigelist_2.2.6-30_iphoneos-arm.deb", 501, 20, 0755);
-	//install("/files/com.nito.updatebegone_0.2-1_iphoneos-arm.deb", "/mnt/com.nito.updatebegone_0.2-1_iphoneos-arm.deb", 501, 20, 0755);
+	install("/files/beigelist_2.2.6-30_iphoneos-arm.deb", "/mnt/beigelist_2.2.6-30_iphoneos-arm.deb", 501, 20, 0755);
+	install("/files/com.nito.updatebegone_0.2-1_iphoneos-arm.deb", "/mnt/com.nito.updatebegone_0.2-1_iphoneos-arm.deb", 501, 20, 0755);
 	install("/files/com.saurik.patcyh_1.2.0_iphoneos-arm-fixed.deb", "/mnt/com.saurik.patcyh_1.2.0_iphoneos-arm-fixed.deb", 501, 20, 0755);
-	//install("/files/ldid_1-1.2.1_iphoneos-arm.deb", "/mnt/ldid_1-1.2.1_iphoneos-arm.deb", 501, 20, 0755);
+	install("/files/ldid_1-1.2.1_iphoneos-arm.deb", "/mnt/ldid_1-1.2.1_iphoneos-arm.deb", 501, 20, 0755);
 	install("/files/rtadvd_307.0.1-2_iphoneos-arm-fixed.deb", "/mnt/rtadvd_307.0.1-2_iphoneos-arm-fixed.deb", 501, 20, 0755);
 	install("/files/sqlite3-dylib_3.5.9-1_iphoneos-arm-fixed.deb", "/mnt/sqlite3-dylib_3.5.9-1_iphoneos-arm-fixed.deb", 501, 20, 0755);
 	install("/files/sqlite3-lib_3.5.9-2_iphoneos-arm-fixed.deb", "/mnt/sqlite3-lib_3.5.9-2_iphoneos-arm-fixed.deb", 501, 20, 0755);
